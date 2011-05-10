@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo 'Working dir:' `pwd`
+echo 'Parameters:' $*
+
+name=$1
+hash=$2
+
+url=https://github.com/md2perpe/hook-test/zipball/$name
+echo 'URL:' $url
+wget --no-check-certificate -O raw.zip $url || echo 'Failed fetching URL'
+
+unzip raw.zip
+rm -f raw.zip
+
+dir=md2perpe-hook-test-$hash
+echo 'Directory:' $dir
+cd $dir || exit -1
+rm -f ../repacked.zip
+zip -r ../repacked.zip * || echo 'Zip failed'
+cd ..
+
+rm -rf $dir
